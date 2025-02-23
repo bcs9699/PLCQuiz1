@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <GVL Name="GVL" Id="{f1ae787c-8a35-4a90-b7db-8b07a74dc64f}">
+    <Declaration><![CDATA[//{attribute 'qualified_only'}
+VAR_GLOBAL
+	    {State Management}
+    Step : INT := 0; // 0=Idle, 1=Feeding, 2=Filling, 3=Settling, 4=Capping, 5=Pushing, 6=Resetting
+    SysStart : BOOL; // HMI Start command
+    SysStop : BOOL; // HMI Stop command
+    SystemRunning : BOOL;
+    
+    {Counters}
+    BottleCount : INT := 0;
+    CapCount : INT := 0;
+    TotalBottles : REAL := 0;
+    BottlesPerMinute : REAL := 0.0;
+    
+    {Timers}
+    FeedTimer : TON;
+    FillTimer : TON;
+    SettleTimer : TON;
+    CycleTimer : TON;
+	CapTimer : TON;
+    
+    {Faults}
+    Fault_BottleJam : BOOL;
+    Fault_CapJam : BOOL;
+    Fault_TakeawayJam : BOOL;
+    Fault_Reset : BOOL; // HMI Fault Reset
+	Faulted : BOOL;
+END_VAR]]></Declaration>
+  </GVL>
+</TcPlcObject>

@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="Counters" Id="{b5ed8841-5de1-4166-987d-759a62ca28b0}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM Counters
+VAR
+	BottleTrig : R_TRIG;
+	CapTrig : R_TRIG;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[//*******************************************************
+// SUBROUTINE Counters
+//*******************************************************
+BottleTrig(CLK:= Bottle_Sensor, Q=> );
+CapTrig(CLK:= Cap_Sensor, Q=> );
+
+IF  BottleTrig.Q AND SystemRunning THEN
+    BottleCount := BottleCount + 1;
+END_IF
+
+IF  CapTrig.Q AND SystemRunning THEN
+    CapCount := CapCount + 1;
+END_IF
+
+// Bottles/Minute Calculation
+IF SystemRunning THEN
+    CycleTimer(IN:=TRUE);
+    BottlesPerMinute := (TotalBottles / TIME_TO_REAL(CycleTimer.ET)) * 60.0;
+ELSE
+    CycleTimer(IN:=FALSE);
+END_IF]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

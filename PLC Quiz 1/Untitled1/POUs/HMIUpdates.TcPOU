@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="HMIUpdates" Id="{27ceecba-ff72-431a-a52a-fe07066876e8}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM HMIUpdates
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

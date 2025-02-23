@@ -1,0 +1,721 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="LogicTester" Id="{f66c3376-ebbb-498e-94b2-16eedce34b87}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM LogicTester
+VAR
+	Bottle_Sensor_Timer1 : Ton;
+	Bottle_Sensor_Timer2 : Ton;
+	
+	Cap_Sensor_Timer1 : Ton;
+	Cap_Sensor_Timer2 : Ton;
+	
+	Push_bottles_timer : Ton;
+	
+	EqualStatement1: BOOL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <LADDER>
+        <XmlArchive>
+          <Data>
+            <o xml:space="preserve" t="LadderImplementationObject">
+              <v n="ModelJson">"{
+  "$type": "LadderDataModel",
+  "Networks": [
+    {
+      "$type": "Network",
+      "Id": "zUslUx9P",
+      "Sequence": {
+        "$type": "Sequence",
+        "Elements": [
+          {
+            "$type": "Block",
+            "BlockType": "TON",
+            "Instance": {
+              "$type": "Operand",
+              "Expression": "Bottle_Sensor_Timer1"
+            },
+            "Inputs": [
+              {
+                "$type": "Input",
+                "Pin": {
+                  "$type": "Pin",
+                  "Name": "EN"
+                },
+                "Sequence": {
+                  "$type": "Sequence"
+                }
+              },
+              {
+                "$type": "Input",
+                "Pin": {
+                  "$type": "Pin",
+                  "Name": "IN"
+                },
+                "Sequence": {
+                  "$type": "Sequence",
+                  "Elements": [
+                    {
+                      "$type": "Contact",
+                      "Operand": {
+                        "$type": "Operand",
+                        "Expression": "Run_Bottle_Feeder"
+                      }
+                    },
+                    {
+                      "$type": "Contact",
+                      "Operand": {
+                        "$type": "Operand",
+                        "Expression": "Bottle_Sensor_Timer1.Q",
+                        "Modifier": {
+                          "$type": "Modifier",
+                          "Negation": true
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "$type": "Input",
+                "Pin": {
+                  "$type": "Pin",
+                  "Name": "PT"
+                },
+                "Sequence": {
+                  "$type": "Sequence",
+                  "Elements": [
+                    {
+                      "$type": "InVariable",
+                      "Operand": {
+                        "$type": "Operand",
+                        "Expression": "t#1s"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "Outputs": [
+              {
+                "$type": "Output",
+                "Pin": {
+                  "$type": "Pin",
+                  "Name": "ENO"
+                }
+              },
+              {
+                "$type": "Output",
+                "Pin": {
+                  "$type": "Pin",
+                  "Name": "Q"
+                },
+                "OutVariable": {
+                  "$type": "OutVariable",
+                  "Operand": {
+                    "$type": "Operand"
+                  }
+                }
+              },
+              {
+                "$type": "Output",
+                "Pin": {
+                  "$type": "Pin",
+                  "Name": "ET"
+                },
+                "OutVariable": {
+                  "$type": "OutVariable",
+                  "Operand": {
+                    "$type": "Operand"
+                  }
+                }
+              }
+            ],
+            "En": true,
+            "Eno": true
+          }
+        ]
+      }
+    },
+    {
+      "$type": "Network",
+      "Id": "-OWjsBTD",
+      "Sequence": {
+        "$type": "Sequence",
+        "Elements": [
+          {
+            "$type": "Block",
+            "BlockType": "TON",
+            "Instance": {
+              "$type": "Operand",
+              "Expression": "Bottle_Sensor_Timer2"
+            },
+            "Inputs": [
+              {
+                "$type": "Input",
+                "Pin": {
+                  "$type": "Pin",
+                  "Name": "EN"
+                },
+                "Sequence": {
+                  "$type": "Sequence"
+                }
+              },
+              {
+                "$type": "Input",
+                "Pin": {
+                  "$type": "Pin",
+                  "Name": "IN"
+                },
+                "Sequence": {
+                  "$type": "Sequence",
+                  "Elements": [
+                    {
+                      "$type": "Contact",
+                      "Operand": {
+                        "$type": "Operand",
+                        "Expression": "Bottle_Sensor_Timer1.Q"
+                      }
+                    },
+                    {
+                      "$type": "ParallelOpen",
+                      "Branches": [
+                        {
+                          "$type": "Sequence"
+                        },
+                        {
+                          "$type": "Sequence",
+                          "Elements": [
+                            {
+                              "$type": "Coil",
+                              "Operand": {
+                                "$type": "Operand",
+                                "Expression": "Bottle_Sensor"
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              },
+              {
+                "$type": "Input",
+                "Pin": {
+                  "$type": "Pin",
+                  "Name": "PT"
+                },
+                "Sequence": {
+                  "$type": "Sequence",
+                  "Elements": [
+                    {
+                      "$type": "InVariable",
+                      "Operand": {
+                        "$type": "Operand",
+                        "Expression": "t#250ms"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "Outputs": [
+              {
+                "$type": "Output",
+                "Pin": {
+                  "$type": "Pin",
+                  "Name": "ENO"
+                }
+              },
+              {
+                "$type": "Output",
+                "Pin": {
+                  "$type": "Pin",
+                  "Name": "Q"
+                },
+                "OutVariable": {
+                  "$type": "OutVariable",
+                  "Operand": {
+                    "$type": "Operand"
+                  }
+                }
+              },
+              {
+                "$type": "Output",
+                "Pin": {
+                  "$type": "Pin",
+                  "Name": "ET"
+                },
+                "OutVariable": {
+                  "$type": "OutVariable",
+                  "Operand": {
+                    "$type": "Operand"
+                  }
+                }
+              }
+            ],
+            "En": true,
+            "Eno": true
+          }
+        ]
+      }
+    },
+    {
+      "$type": "Network",
+      "Id": "duKnEdxe",
+      "Sequence": {
+        "$type": "Sequence",
+        "Elements": [
+          {
+            "$type": "Block",
+            "BlockType": "TON",
+            "Instance": {
+              "$type": "Operand",
+              "Expression": "Cap_Sensor_Timer1"
+            },
+            "Inputs": [
+              {
+                "$type": "Input",
+                "Pin": {
+                  "$type": "Pin",
+                  "Name": "EN"
+                },
+                "Sequence": {
+                  "$type": "Sequence"
+                }
+              },
+              {
+                "$type": "Input",
+                "Pin": {
+                  "$type": "Pin",
+                  "Name": "IN"
+                },
+                "Sequence": {
+                  "$type": "Sequence",
+                  "Elements": [
+                    {
+                      "$type": "Contact",
+                      "Operand": {
+                        "$type": "Operand",
+                        "Expression": "Apply_Caps_Solenoid"
+                      }
+                    },
+                    {
+                      "$type": "Contact",
+                      "Operand": {
+                        "$type": "Operand",
+                        "Expression": "Cap_Sensor_Timer1.Q",
+                        "Modifier": {
+                          "$type": "Modifier",
+                          "Negation": true
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "$type": "Input",
+                "Pin": {
+                  "$type": "Pin",
+                  "Name": "PT"
+                },
+                "Sequence": {
+                  "$type": "Sequence",
+                  "Elements": [
+                    {
+                      "$type": "InVariable",
+                      "Operand": {
+                        "$type": "Operand",
+                        "Expression": "t#500ms"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "Outputs": [
+              {
+                "$type": "Output",
+                "Pin": {
+                  "$type": "Pin",
+                  "Name": "ENO"
+                }
+              },
+              {
+                "$type": "Output",
+                "Pin": {
+                  "$type": "Pin",
+                  "Name": "Q"
+                },
+                "OutVariable": {
+                  "$type": "OutVariable",
+                  "Operand": {
+                    "$type": "Operand"
+                  }
+                }
+              },
+              {
+                "$type": "Output",
+                "Pin": {
+                  "$type": "Pin",
+                  "Name": "ET"
+                },
+                "OutVariable": {
+                  "$type": "OutVariable",
+                  "Operand": {
+                    "$type": "Operand"
+                  }
+                }
+              }
+            ],
+            "En": true,
+            "Eno": true
+          }
+        ]
+      }
+    },
+    {
+      "$type": "Network",
+      "Id": "l_csySfm",
+      "Sequence": {
+        "$type": "Sequence",
+        "Elements": [
+          {
+            "$type": "Block",
+            "BlockType": "TON",
+            "Instance": {
+              "$type": "Operand",
+              "Expression": "Cap_Sensor_Timer2"
+            },
+            "Inputs": [
+              {
+                "$type": "Input",
+                "Pin": {
+                  "$type": "Pin",
+                  "Name": "EN"
+                },
+                "Sequence": {
+                  "$type": "Sequence"
+                }
+              },
+              {
+                "$type": "Input",
+                "Pin": {
+                  "$type": "Pin",
+                  "Name": "IN"
+                },
+                "Sequence": {
+                  "$type": "Sequence",
+                  "Elements": [
+                    {
+                      "$type": "Contact",
+                      "Operand": {
+                        "$type": "Operand",
+                        "Expression": "Cap_Sensor_Timer1.Q"
+                      }
+                    },
+                    {
+                      "$type": "ParallelOpen",
+                      "Branches": [
+                        {
+                          "$type": "Sequence"
+                        },
+                        {
+                          "$type": "Sequence",
+                          "Elements": [
+                            {
+                              "$type": "Coil",
+                              "Operand": {
+                                "$type": "Operand",
+                                "Expression": "Cap_Sensor"
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              },
+              {
+                "$type": "Input",
+                "Pin": {
+                  "$type": "Pin",
+                  "Name": "PT"
+                },
+                "Sequence": {
+                  "$type": "Sequence",
+                  "Elements": [
+                    {
+                      "$type": "InVariable",
+                      "Operand": {
+                        "$type": "Operand",
+                        "Expression": "t#250ms"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "Outputs": [
+              {
+                "$type": "Output",
+                "Pin": {
+                  "$type": "Pin",
+                  "Name": "ENO"
+                }
+              },
+              {
+                "$type": "Output",
+                "Pin": {
+                  "$type": "Pin",
+                  "Name": "Q"
+                },
+                "OutVariable": {
+                  "$type": "OutVariable",
+                  "Operand": {
+                    "$type": "Operand"
+                  }
+                }
+              },
+              {
+                "$type": "Output",
+                "Pin": {
+                  "$type": "Pin",
+                  "Name": "ET"
+                },
+                "OutVariable": {
+                  "$type": "OutVariable",
+                  "Operand": {
+                    "$type": "Operand"
+                  }
+                }
+              }
+            ],
+            "En": true,
+            "Eno": true
+          }
+        ]
+      }
+    },
+    {
+      "$type": "Network",
+      "Id": "SienhOMS",
+      "Sequence": {
+        "$type": "Sequence",
+        "Elements": [
+          {
+            "$type": "Block",
+            "BlockType": "EQ",
+            "Instance": {
+              "$type": "Operand"
+            },
+            "Inputs": [
+              {
+                "$type": "Input",
+                "Pin": {
+                  "$type": "Pin",
+                  "Name": "EN"
+                },
+                "Sequence": {
+                  "$type": "Sequence"
+                }
+              },
+              {
+                "$type": "Input",
+                "Pin": {
+                  "$type": "Pin"
+                },
+                "Sequence": {
+                  "$type": "Sequence",
+                  "Elements": [
+                    {
+                      "$type": "InVariable",
+                      "Operand": {
+                        "$type": "Operand",
+                        "Expression": "Step"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "$type": "Input",
+                "Pin": {
+                  "$type": "Pin"
+                },
+                "Sequence": {
+                  "$type": "Sequence",
+                  "Elements": [
+                    {
+                      "$type": "InVariable",
+                      "Operand": {
+                        "$type": "Operand",
+                        "Expression": "5"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "Outputs": [
+              {
+                "$type": "Output",
+                "Pin": {
+                  "$type": "Pin",
+                  "Name": "ENO"
+                }
+              },
+              {
+                "$type": "Output",
+                "Pin": {
+                  "$type": "Pin"
+                },
+                "OutVariable": {
+                  "$type": "OutVariable",
+                  "Operand": {
+                    "$type": "Operand",
+                    "Expression": "EqualStatement1"
+                  }
+                }
+              }
+            ],
+            "En": true,
+            "Eno": true
+          },
+          {
+            "$type": "Block",
+            "BlockType": "TON",
+            "Instance": {
+              "$type": "Operand",
+              "Expression": "Push_Bottles_Timer"
+            },
+            "Inputs": [
+              {
+                "$type": "Input",
+                "Pin": {
+                  "$type": "Pin",
+                  "Name": "EN"
+                },
+                "Sequence": {
+                  "$type": "Sequence"
+                }
+              },
+              {
+                "$type": "Input",
+                "Pin": {
+                  "$type": "Pin",
+                  "Name": "IN"
+                },
+                "Sequence": {
+                  "$type": "Sequence",
+                  "Elements": [
+                    {
+                      "$type": "Contact",
+                      "Operand": {
+                        "$type": "Operand",
+                        "Expression": "EqualStatement1"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "$type": "Input",
+                "Pin": {
+                  "$type": "Pin",
+                  "Name": "PT"
+                },
+                "Sequence": {
+                  "$type": "Sequence",
+                  "Elements": [
+                    {
+                      "$type": "InVariable",
+                      "Operand": {
+                        "$type": "Operand",
+                        "Expression": "t#250ms"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "Outputs": [
+              {
+                "$type": "Output",
+                "Pin": {
+                  "$type": "Pin",
+                  "Name": "ENO"
+                }
+              },
+              {
+                "$type": "Output",
+                "Pin": {
+                  "$type": "Pin",
+                  "Name": "Q"
+                },
+                "OutVariable": {
+                  "$type": "OutVariable",
+                  "Operand": {
+                    "$type": "Operand"
+                  }
+                }
+              },
+              {
+                "$type": "Output",
+                "Pin": {
+                  "$type": "Pin",
+                  "Name": "ET"
+                },
+                "OutVariable": {
+                  "$type": "OutVariable",
+                  "Operand": {
+                    "$type": "Operand"
+                  }
+                }
+              }
+            ],
+            "En": true,
+            "Eno": true
+          }
+        ]
+      }
+    },
+    {
+      "$type": "Network",
+      "Id": "PxZJOE93",
+      "Sequence": {
+        "$type": "Sequence",
+        "Elements": [
+          {
+            "$type": "Contact",
+            "Operand": {
+              "$type": "Operand",
+              "Expression": "Push_bottles_timer.Q"
+            }
+          },
+          {
+            "$type": "Coil",
+            "Operand": {
+              "$type": "Operand",
+              "Expression": "Bottles_On_Takeaway_LS"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}"</v>
+            </o>
+          </Data>
+          <TypeList>
+            <Type n="LadderImplementationObject">{f0fda5b8-8c48-4377-bbd5-c49444e4d26e}</Type>
+            <Type n="String">System.String</Type>
+          </TypeList>
+        </XmlArchive>
+      </LADDER>
+    </Implementation>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FaultDetection" Id="{3ecdc1f9-68c0-4b84-b7f8-edc529786f1f}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM FaultDetection
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[//*******************************************************
+// SUBROUTINE FaultDetection
+//*******************************************************
+// Bottle Jam Detection
+IF Run_Bottle_Feeder AND NOT Bottle_Sensor THEN
+    FeedTimer(IN:=TRUE, PT:=T#5S);
+    IF FeedTimer.Q THEN Fault_BottleJam := TRUE; END_IF
+ELSE
+    FeedTimer(IN:=FALSE);
+END_IF
+
+// Cap Jam Detection
+IF Apply_Caps_Solenoid AND NOT Cap_Sensor THEN
+    CapTimer(IN:=TRUE, PT:=T#5S);
+    IF CapTimer.Q THEN Fault_CapJam := TRUE; END_IF
+ELSE
+    CapTimer(IN:=FALSE);
+END_IF
+
+// System-Wide Fault Handling
+IF Fault_BottleJam OR Fault_CapJam OR Fault_TakeawayJam THEN
+	Faulted := TRUE;
+    SystemRunning := FALSE;
+    Step := 0;
+END_IF
+
+IF Fault_Reset THEN
+	Faulted := FALSE;
+    Fault_BottleJam := FALSE;
+    Fault_CapJam := FALSE;
+    Fault_TakeawayJam := FALSE;
+END_IF]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

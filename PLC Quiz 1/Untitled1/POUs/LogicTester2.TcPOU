@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="LogicTester2" Id="{5aba5621-1901-4aa7-9b45-5e85dc74367f}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM LogicTester2
+VAR
+    {Bottle Feeding Simulation}
+    SimBottleTimer : TON;
+    SimBottleInterval : TIME := T#500ms;  // Adjust for desired feed rate
+    SimBottlePulse : BOOL;
+    LastFeederState : BOOL := FALSE;
+    
+    {Cap Installation Simulation}
+    SimCapTimer : TON;
+    SimCapInterval : TIME := T#300ms;     // Adjust for capping speed
+    SimCapPulse : BOOL;
+    LastCapperState : BOOL := FALSE;
+    
+    {Pusher/Takeaway Simulation}
+    PusherDelayTimer : TON;
+    TakeawayDelay : TIME := T#2s;         // Time until bottles reach takeaway
+    ResetDelayTimer : TON;
+    ResetDelay : TIME := T#3s;            // Time until system resets
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[//*******************************************************
+// SUBROUTINE SimulateIO
+// Simulates sensor inputs based on output states
+//*******************************************************
+
+
+
+// ----------------------------
+// Bottle Feed Sensor Simulation
+// ----------------------------
+IF Run_Bottle_Feeder THEN
+    // Generate bottle presence pulses
+    SimBottleTimer(IN:=NOT SimBottleTimer.Q, PT:=SimBottleInterval);
+    SimBottlePulse := SimBottleTimer.Q;
+    
+    // Reset simulation when feeder stops
+    LastFeederState := Run_Bottle_Feeder;
+ELSE
+    SimBottleTimer(IN:=FALSE);
+    SimBottlePulse := FALSE;
+END_IF
+
+// Rising edge detection for bottle count
+Bottle_Sensor := SimBottlePulse AND Run_Bottle_Feeder;
+
+
+
+// ----------------------------
+// Cap Sensor Simulation
+// ----------------------------
+IF Apply_Caps_Solenoid THEN
+    // Generate capping completion pulses
+    SimCapTimer(IN:=NOT SimCapTimer.Q, PT:=SimCapInterval);
+    SimCapPulse := SimCapTimer.Q;
+    
+    // Reset simulation when capper stops
+    LastCapperState := Apply_Caps_Solenoid;
+ELSE
+    SimCapTimer(IN:=FALSE);
+    SimCapPulse := FALSE;
+END_IF
+
+// Rising edge detection for cap count
+Cap_Sensor := SimCapPulse AND Apply_Caps_Solenoid;
+
+
+
+// ----------------------------
+// Takeaway Limit Switch Simulation
+// ----------------------------
+IF Push_Off_Bottles_Solenoid THEN
+    // Delay before bottles reach takeaway
+    PusherDelayTimer(IN:=TRUE, PT:=TakeawayDelay);
+    IF PusherDelayTimer.Q THEN
+        Bottles_On_Takeaway_LS := TRUE;
+        PusherDelayTimer(IN:=FALSE);
+    END_IF
+ELSE
+    // Auto-reset after delay
+    IF Bottles_On_Takeaway_LS THEN
+        ResetDelayTimer(IN:=TRUE, PT:=ResetDelay);
+        IF ResetDelayTimer.Q THEN
+            Bottles_On_Takeaway_LS := FALSE;
+            ResetDelayTimer(IN:=FALSE);
+        END_IF
+    END_IF
+END_IF]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

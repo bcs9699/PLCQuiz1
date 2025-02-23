@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="Initialize" Id="{70163d09-83bf-43fc-b78c-35b24344d844}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM Initialize
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[//*******************************************************
+// SUBROUTINE Initialize
+//*******************************************************
+IF NOT SystemRunning THEN
+    Step := 0;
+    BottleCount := 0;
+    CapCount := 0;
+    Run_Bottle_Feeder := FALSE;
+    Fill_Bottles_Solenoid := FALSE;
+    Apply_Caps_Solenoid := FALSE;
+    Push_Off_Bottles_Solenoid := FALSE;
+END_IF]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

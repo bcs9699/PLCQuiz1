@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="MainCycle" Id="{03f37c37-1fcc-4770-8bdb-7dbbb67af604}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MainCycle
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[//*******************************************************
+// SUBROUTINE MainCycle
+//*******************************************************
+CASE Step OF
+    0: // Idle
+        IF SysStart AND NOT Faulted THEN
+            SystemRunning := TRUE;
+            Step := 1;
+        END_IF
+
+    1: // Feeding Bottles
+        Run_Bottle_Feeder := TRUE;
+        IF BottleCount >= 12 THEN
+            Step := 2;
+            BottleCount := 0;
+        END_IF
+
+    2: // Filling
+        Fill_Bottles_Solenoid := TRUE;
+        FillTimer(IN:=TRUE, PT:=T#6.3S);
+        IF FillTimer.Q THEN
+            Step := 3;
+            FillTimer(IN:=FALSE);
+        END_IF
+
+    3: // Settling
+        SettleTimer(IN:=TRUE, PT:=T#3.8S);
+        IF SettleTimer.Q THEN
+            Step := 4;
+            SettleTimer(IN:=FALSE);
+        END_IF
+
+    4: // Capping
+        Apply_Caps_Solenoid := TRUE;
+        IF CapCount >= 12 THEN
+            Step := 5;
+            CapCount := 0;
+        END_IF
+
+    5: // Pushing
+        Push_Off_Bottles_Solenoid := TRUE;
+        IF Bottles_On_Takeaway_LS THEN
+            Step := 6;
+        END_IF
+
+    6: // Resetting
+        Push_Off_Bottles_Solenoid := FALSE;
+        TotalBottles := TotalBottles + 12;
+        Step := 0;
+END_CASE]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

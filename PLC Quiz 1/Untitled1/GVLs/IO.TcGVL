@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <GVL Name="IO" Id="{1b850a79-8d17-4c77-8392-0fe840d83cd7}">
+    <Declaration><![CDATA[//{attribute 'qualified_only'}
+VAR_GLOBAL
+	//Inputs
+		Bottle_Sensor : BOOL;
+		Cap_Sensor : BOOL;
+		Bottles_On_Takeaway_LS : BOOL;
+		
+	//Outputs
+		Run_Bottle_Feeder : BOOL;
+		Fill_Bottles_Solenoid : BOOL;
+		Apply_Caps_Solenoid : BOOL;
+		Push_Off_Bottles_Solenoid : BOOL;
+	
+END_VAR]]></Declaration>
+  </GVL>
+</TcPlcObject>

@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="MAIN" Id="{527f438a-01c8-4e6e-8aa4-aea9433d8d02}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MAIN
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+// Main Routine
+Initialize();
+MainCycle();
+FaultDetection();
+Counters();
+HMIUpdates();
+
+//LogicTester();
+LogicTester2();
+
+
+
+
+
+
+
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>
