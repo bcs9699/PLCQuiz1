@@ -8,6 +8,7 @@ VAR_GLOBAL
     SysStart : BOOL; // HMI Start command
     SysStop : BOOL; // HMI Stop command
     SystemRunning : BOOL;
+	SystemState : STRING;
     
     {Counters}
     BottleCount : INT := 0;

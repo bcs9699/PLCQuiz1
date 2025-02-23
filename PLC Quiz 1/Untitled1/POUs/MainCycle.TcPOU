@@ -11,12 +11,14 @@ END_VAR
 //*******************************************************
 CASE Step OF
     0: // Idle
+	SystemState := 'Idle';
         IF SysStart AND NOT Faulted THEN
             SystemRunning := TRUE;
             Step := 1;
         END_IF
 
     1: // Feeding Bottles
+	SystemState := 'Feeding';
         Run_Bottle_Feeder := TRUE;
         IF BottleCount >= 12 THEN
             Step := 2;
@@ -24,6 +26,7 @@ CASE Step OF
         END_IF
 
     2: // Filling
+	SystemState := 'Filling';
         Fill_Bottles_Solenoid := TRUE;
         FillTimer(IN:=TRUE, PT:=T#6.3S);
         IF FillTimer.Q THEN
@@ -32,6 +35,7 @@ CASE Step OF
         END_IF
 
     3: // Settling
+	SystemState := 'Settling';
         SettleTimer(IN:=TRUE, PT:=T#3.8S);
         IF SettleTimer.Q THEN
             Step := 4;
@@ -39,6 +43,7 @@ CASE Step OF
         END_IF
 
     4: // Capping
+	SystemState := 'Capping';
         Apply_Caps_Solenoid := TRUE;
         IF CapCount >= 12 THEN
             Step := 5;
@@ -46,12 +51,14 @@ CASE Step OF
         END_IF
 
     5: // Pushing
+	SystemState := 'Pushing';
         Push_Off_Bottles_Solenoid := TRUE;
         IF Bottles_On_Takeaway_LS THEN
             Step := 6;
         END_IF
 
     6: // Resetting
+	SystemState := 'Resetting';
         Push_Off_Bottles_Solenoid := FALSE;
         TotalBottles := TotalBottles + 12;
         Step := 0;

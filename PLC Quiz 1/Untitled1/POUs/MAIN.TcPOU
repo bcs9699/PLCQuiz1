@@ -6,16 +6,17 @@ VAR
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[
+      <ST><![CDATA[//LogicTester();
+LogicTester2();
+
 // Main Routine
 Initialize();
 MainCycle();
-FaultDetection();
 Counters();
+FaultDetection();
 HMIUpdates();
 
-//LogicTester();
-LogicTester2();
+
 
 
 

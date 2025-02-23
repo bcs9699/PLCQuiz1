@@ -12,7 +12,10 @@ END_VAR
 // Bottle Jam Detection
 IF Run_Bottle_Feeder AND NOT Bottle_Sensor THEN
     FeedTimer(IN:=TRUE, PT:=T#5S);
-    IF FeedTimer.Q THEN Fault_BottleJam := TRUE; END_IF
+    IF FeedTimer.Q THEN 
+		Fault_BottleJam := TRUE;
+		SystemState := 'Bottle Jam Fault';
+	END_IF
 ELSE
     FeedTimer(IN:=FALSE);
 END_IF
@@ -20,7 +23,10 @@ END_IF
 // Cap Jam Detection
 IF Apply_Caps_Solenoid AND NOT Cap_Sensor THEN
     CapTimer(IN:=TRUE, PT:=T#5S);
-    IF CapTimer.Q THEN Fault_CapJam := TRUE; END_IF
+    IF CapTimer.Q THEN 
+		Fault_CapJam := TRUE;
+		SystemState := 'Cap Jam Fault';
+	END_IF
 ELSE
     CapTimer(IN:=FALSE);
 END_IF
